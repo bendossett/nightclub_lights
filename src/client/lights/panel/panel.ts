@@ -15,7 +15,9 @@ export class Panel extends Light {
     const model = `ba_rig_dj_${panelColor}_lights_04_${panelPattern}_scr`;
     const anim = `ba_rig_dj_${panelColor}_lights_04_${panelPattern}_scr_uv_4`;
 
-    super(model, anim, 'ba_prop_battle_lights_05', position, rotation);
+    // rotation.z += 90.0;
+
+    super(model, null, anim, 'ba_prop_battle_lights_05', position, rotation);
 
     this.panelColor = panelColor;
     this.panelPattern = panelPattern;

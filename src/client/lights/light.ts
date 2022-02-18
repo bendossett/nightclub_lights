@@ -3,6 +3,7 @@ import { Delay } from "../utils";
 
 export class Light {
   protected model: string;
+  protected offModel?: string;
   protected anim?: string;
   protected animDict: string;
 
@@ -10,11 +11,13 @@ export class Light {
   protected rotation: Vector3;
 
   protected entity: number;
+  protected offEntity?: number;
 
   protected isOn: boolean;
 
-  constructor(model: string, anim: string | null, animDict: string, position: Vector3, rotation: Vector3) {
+  constructor(model: string, offModel: string | null, anim: string | null, animDict: string, position: Vector3, rotation: Vector3) {
     this.model = model;
+    if (offModel) this.offModel = offModel;
     if (anim) this.anim = anim;
     this.animDict = animDict;
     this.position = position;
@@ -45,6 +48,19 @@ export class Light {
       return false;
     }
 
+    if (this.offModel) {
+      count = 0;
+      RequestModel(this.offModel);
+      while (count < 500 && !HasModelLoaded(this.offModel)) {
+        await Delay(1);
+        count++;
+      }
+      if (count >= 500) {
+        console.log(`Failed to load model ${this.offModel}`);
+        return false;
+      }
+    }
+
     if (!this.anim) return true;
 
     count = 0;
@@ -69,8 +85,13 @@ export class Light {
       DeleteEntity(this.entity);
     }
 
-    this.entity = CreateObjectNoOffset(this.model, this.position.x, this.position.y, this.position.z, true, false, false);
+    this.entity = CreateObjectNoOffset(this.model, this.position.x, this.position.y, this.position.z, false, false, false);    
     SetEntityRotation(this.entity, this.rotation.x, this.rotation.y, this.rotation.z, 2, true);
+
+    if (this.offModel) {
+      this.offEntity = CreateObjectNoOffset(this.offModel, this.position.x, this.position.y, this.position.z, false, false, false);
+      SetEntityRotation(this.offEntity, this.rotation.x, this.rotation.y, this.rotation.z, 2, true);
+    }
   }
 
   public on(restartAnim: boolean): void {
@@ -82,6 +103,10 @@ export class Light {
 
     SetEntityAlpha(this.entity, 254, 0);
 
+    if (this.offEntity) {
+      SetEntityAlpha(this.offEntity, 0, 0);
+    }
+
     this.isOn = true;
   }
 
@@ -90,6 +115,34 @@ export class Light {
 
     SetEntityAlpha(this.entity, 0, 0);
 
+    if (this.offEntity) {
+      SetEntityAlpha(this.offEntity, 254, 0);
+    }
+
     this.isOn = false;
+  }
+
+  public getPosition(): Vector3 {
+    return this.position;
+  }
+
+  public setPosition(position: Vector3): void {
+    SetEntityCoords(this.entity, position.x, position.y, position.z, false, false, false, false);
+    if (this.offEntity)
+      SetEntityCoords(this.offEntity, position.x, position.y, position.z, false, false, false, false);
+  }
+
+  public getRotation(): Vector3 {
+    return this.rotation;
+  }
+
+  public setRotation(rotation: Vector3): void {
+    SetEntityRotation(this.entity, rotation.x, rotation.y, rotation.z, 2, true);
+    if (this.offEntity)
+      SetEntityRotation(this.offEntity, rotation.x, rotation.y, rotation.z, 2, true);
+  }
+
+  public getEntity(): number {
+    return this.entity;
   }
 }

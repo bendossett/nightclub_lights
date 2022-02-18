@@ -12,10 +12,12 @@ export class Laser extends Light {
               position: Vector3,
               rotation: Vector3) {
 
-    const model = `ba_rig_dj_${laserColor}_lights_04_${laserPattern}`;
-    const anim = `ba_rig_dj_${laserColor}_lights_04_${laserPattern}`;
+    const model = `ba_rig_dj_${laserColor}_lights_04_${laserPattern.split(' ')[0]}`;
+    const anim = `ba_rig_dj_${laserColor}_lights_04_${laserPattern.split(' ')[1]}`;
+    
+    // rotation.z += 90.0;
 
-    super(model, anim, 'ba_prop_battle_lights_05', position, rotation);
+    super(model, null, anim, 'ba_prop_battle_lights_05', position, rotation);
 
     this.laserColor = laserColor;
     this.laserPattern = laserPattern;
@@ -23,8 +25,8 @@ export class Laser extends Light {
 
   public async setColor(color: LaserColor): Promise<void> {
     this.laserColor = color;
-    this.model = `ba_rig_dj_${this.laserColor}_lights_04_${this.laserPattern}`;
-    this.anim  = `ba_rig_dj_${this.laserColor}_lights_04_${this.laserPattern}`;
+    this.model = `ba_rig_dj_${this.laserColor}_lights_04_${this.laserPattern.split(' ')[0]}`;
+    this.anim  = `ba_rig_dj_${this.laserColor}_lights_04_${this.laserPattern.split(' ')[1]}`;
 
     await this.createObjects(true);
 
@@ -34,8 +36,8 @@ export class Laser extends Light {
   public async setPattern(pattern: LaserPattern): Promise<void> {
     this.laserPattern = pattern;
 
-    this.model = `ba_rig_dj_${this.laserColor}_lights_04_${this.laserPattern}`;
-    this.anim  = `ba_rig_dj_${this.laserColor}_lights_04_${this.laserPattern}`;
+    this.model = `ba_rig_dj_${this.laserColor}_lights_04_${this.laserPattern.split(' ')[0]}`;
+    this.anim  = `ba_rig_dj_${this.laserColor}_lights_04_${this.laserPattern.split(' ')[1]}`;
 
     await this.createObjects(true);
 

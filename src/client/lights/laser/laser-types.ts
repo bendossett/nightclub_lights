@@ -6,7 +6,13 @@ export enum LaserColor {
 }
 
 export enum LaserPattern { // I can't come up with good names for these, they're hard to describe
-  A = 'a',                 // Its basically just the way the panel flickers
-  B = 'b',
-  C = 'c'
+  AA = 'a a',                 // Its basically just the way the panel flickers
+  AB = 'a b',
+  AC = 'a c',
+  BA = 'b a',
+  BB = 'b b',
+  BC = 'b c',
+  CA = 'c a',
+  CB = 'c b',
+  CC = 'c c'
 }

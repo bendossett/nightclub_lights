@@ -17,8 +17,8 @@ export class LaserCombo extends Light {
               panelPattern: PanelPattern,
               position: Vector3,
               rotation: Vector3) {
-    
-    super('ba_rig_dj_all_lights_04_off', null, 'ba_prop_battle_lights_05', position, rotation);
+    rotation.z += 90.0;
+    super('ba_rig_dj_all_lights_04_off', null, null, 'ba_prop_battle_lights_05', position, rotation);
     
     this.laser = new Laser(laserColor, laserPattern, position, rotation);
     this.panel = new Panel(panelColor, panelPattern, position, rotation);
@@ -44,5 +44,17 @@ export class LaserCombo extends Light {
     SetEntityAlpha(this.entity, 254, 0);
 
     this.isOn = false;
+  }
+
+  public setPosition(position: Vector3): void {
+    super.setPosition(position);
+    this.laser.setPosition(position);
+    this.panel.setPosition(position);
+  }
+
+  public setRotation(rotation: Vector3): void {
+    super.setRotation(rotation);
+    this.laser.setRotation(rotation);
+    this.panel.setRotation(rotation);
   }
 }

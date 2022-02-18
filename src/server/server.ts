@@ -1,7 +1,17 @@
-onNet('helloserver', () => {
-  const _source = (global as any).source;
+import fs from 'fs';
 
-  console.log(`Hello from ${_source}`);
+onNet('coords', (pos: number[], rot: number[], label: string): void => {
+  try {
+    fs.writeFileSync('D:\\FXServer\\server-data\\resources\\[local]\\nightclub_lights\\coords.txt', `${label}  |  ${JSON.stringify({ pos, rot })}`);
+  } catch (e) {
+    console.log(e);
+  }
+});
 
-  emitNet('helloclient', _source, 'i got your message!');
+onNet('saveToFile', (data: string): void => {
+  try {
+    fs.writeFileSync(`D:\\FXServer\\server-data\\resources\\[local]\\nightclub_lights\\light_set_${+ new Date()}.txt`, data);
+  } catch (e) {
+    console.log(e);
+  }
 });
